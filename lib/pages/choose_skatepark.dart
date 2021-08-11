@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skate_guide_cali_mk4/services/weather.dart';
 
-
-
 class ChooseLocation extends StatefulWidget {
   @override
   _ChooseLocationState createState() => _ChooseLocationState();
@@ -10,20 +8,17 @@ class ChooseLocation extends StatefulWidget {
 
 class _ChooseLocationState extends State<ChooseLocation> {
   bool isSearching = false;
-  List filteredSkateParks = [];
 
   List<WorldWeather> weatherlocations = [
     WorldWeather(
       city: 'ripon,us',
       skateparkname: 'Curt Pernice Skatepark',
-      address: '1250 Hughes Ln Ripon, CA 95366' ,
+      address: '1250 Hughes Ln Ripon, CA 95366',
       parksize: '30,000 sqft',
       lights: 'no',
       padrequirement: 'helmet required, pads optional',
       skateparkPicture: 'curt_pernice_skatepark.jpg',
       times: 'Monday - Sunday:  Dawn - Dusk',
-
-
     ),
     WorldWeather(
       city: 'san+jose,us',
@@ -31,11 +26,10 @@ class _ChooseLocationState extends State<ChooseLocation> {
       address: '2305 S White Rd, San Jose CA 95148',
       parksize: '80,000 sqft',
       lights: 'yes',
-      padrequirement: 'helmet required, pads required in certain parts of the park ',
+      padrequirement:
+          'helmet required, pads required in certain parts of the park ',
       skateparkPicture: 'lake_cunningham_skatepark.jpg',
       times: 'Monday - Sunday:  8AM - 8PM ',
-
-
     ),
     WorldWeather(
       city: 'encinitas,us',
@@ -46,8 +40,6 @@ class _ChooseLocationState extends State<ChooseLocation> {
       padrequirement: 'helmet & pads required',
       skateparkPicture: 'magdalena_ecke_ymca_skatepark.jpg',
       times: 'Monday - Friday:  3PM - 7:30PM\nSaturday - Sunday:  9AM - 5PM ',
-
-
     ),
     WorldWeather(
       city: 'sacramento,us',
@@ -58,8 +50,6 @@ class _ChooseLocationState extends State<ChooseLocation> {
       padrequirement: 'helmet & pads required',
       skateparkPicture: 'tanzanite_skatepark.jpg',
       times: 'Monday - Sunday:  8AM - 9PM',
-
-
     ),
     WorldWeather(
       city: 'santa+monica,us',
@@ -69,9 +59,8 @@ class _ChooseLocationState extends State<ChooseLocation> {
       lights: 'yes',
       padrequirement: 'helmet & pads required',
       skateparkPicture: 'the_cove_skatepark.jpg',
-      times: 'Monday - Friday:  1PM - 8PM\nSaturday:  12PM - 6PM\nSunday:  12PM - 7PM',
-
-
+      times:
+          'Monday - Friday:  1PM - 8PM\nSaturday:  12PM - 6PM\nSunday:  12PM - 7PM',
     ),
     WorldWeather(
       city: 'huntington+beach,us',
@@ -82,8 +71,6 @@ class _ChooseLocationState extends State<ChooseLocation> {
       padrequirement: 'helmet & pads required',
       skateparkPicture: 'vens_off_the_wall_skatepark.jpg',
       times: 'TEMPORARILY CLOSED',
-
-
     ),
     WorldWeather(
       city: 'orange+county',
@@ -91,11 +78,11 @@ class _ChooseLocationState extends State<ChooseLocation> {
       address: '20 City Blvd W Suite 2, Orange, CA 92868',
       parksize: '20,000 sqft',
       lights: 'yes',
-      padrequirement: 'helmet & pads required (unless 18 or over, only helmet required)',
+      padrequirement:
+          'helmet & pads required (unless 18 or over, only helmet required)',
       skateparkPicture: 'vans_orange_county_skatepark.jpg',
-      times: 'Monday - Thursday:  11AM - 7PM\nFriday - Saturday:  10AM - 8PM\nSunday:  12PM - 6PM',
-
-
+      times:
+          'Monday - Thursday:  11AM - 7PM\nFriday - Saturday:  10AM - 8PM\nSunday:  12PM - 6PM',
     ),
     WorldWeather(
       city: 'venice,us',
@@ -106,15 +93,13 @@ class _ChooseLocationState extends State<ChooseLocation> {
       padrequirement: 'none',
       skateparkPicture: 'venice_beach_skatepark.jpg',
       times: 'Monday - Sunday:  Open 24 Hours',
-
-
     )
-
   ];
+  List<WorldWeather> filteredSkateParks = [];
 
   void updateWeather(index) async {
-    WorldWeather instance = weatherlocations[index];
-    String weather = await instance.getWeather();
+    WorldWeather instance = filteredSkateParks[index];
+    await instance.getWeather();
     //navigate to home screen
     Navigator.pop(context, {
       'location': instance.skateparkname,
@@ -125,13 +110,21 @@ class _ChooseLocationState extends State<ChooseLocation> {
       'lights': instance.lights,
       'padrequirement': instance.padrequirement,
       'times': instance.times,
-
-
     });
   }
 
-  void _filterSkateParks(value){
-    filteredSkateParks = weatherlocations.where((WorldWeather) => weatherData['location'] = 'Venice Beach Skatepark').toList();
+  @override
+  void initState() {
+    super.initState();
+    filteredSkateParks = weatherlocations;
+  }
+
+  void _filterSkateParks(value) {
+    filteredSkateParks = weatherlocations
+        .where((WorldWeather weatherData) =>
+            weatherData.skateparkname!.contains(value))
+        .toList();
+    setState(() {});
   }
 
   @override
@@ -143,45 +136,42 @@ class _ChooseLocationState extends State<ChooseLocation> {
         title: !isSearching
             ? Text('Choose a Skate Park')
             : TextField(
-          onChanged: (value){
-            _filterSkateParks(value);
-
-          },
-
-
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              icon: Icon(Icons.search,color: Colors.white,  ) ,
-              hintText: "Search Skate Park Here",
-            hintStyle: TextStyle(color: Colors.white)
-
-          ),
-        ),
+                onChanged: (value) {
+                  _filterSkateParks(value);
+                },
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    hintText: "Search Skate Park Here",
+                    hintStyle: TextStyle(color: Colors.white)),
+              ),
         centerTitle: true,
         elevation: 0,
-        actions:[
-          isSearching ?
-          IconButton(icon: Icon(Icons.cancel),
-            onPressed: (){
-              setState((){
-                this.isSearching = false;
-              });
-
-            },
-          )
-          :IconButton(icon: Icon(Icons.search),
-          onPressed: (){
-            setState((){
-              this.isSearching = true;
-            });
-
-          },
-        ),
-
+        actions: [
+          isSearching
+              ? IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = false;
+                    });
+                  },
+                )
+              : IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = true;
+                    });
+                  },
+                ),
         ],
       ),
       body: ListView.builder(
-        itemCount: weatherlocations.length,
+        itemCount: filteredSkateParks.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 4.0),
@@ -190,10 +180,10 @@ class _ChooseLocationState extends State<ChooseLocation> {
                 onTap: () {
                   updateWeather(index);
                 },
-                title: Text(weatherlocations[index].skateparkname.toString()),
+                title: Text(filteredSkateParks[index].skateparkname.toString()),
                 leading: CircleAvatar(
-                  backgroundImage:
-                  AssetImage('assets/${weatherlocations[index].skateparkPicture}'),
+                  backgroundImage: AssetImage(
+                      'assets/${filteredSkateParks[index].skateparkPicture}'),
                 ),
               ),
             ),
